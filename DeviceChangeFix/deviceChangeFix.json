@@ -4,6 +4,7 @@
   "Punchline": "Stops controller input from freezing randomly.",
   "Description": "Stops controller input from freezing randomly.",
   "InternalName": "DeviceChangeFix",
+  "RepoUrl": "https://github.com/PGGB/DeviceChangeFix",
   "ApplicableVersion": "any",
   "Tags": [
     "fix",

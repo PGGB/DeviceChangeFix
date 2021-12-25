@@ -21,15 +21,19 @@
 		<OutputPath>$(AppData)\XIVLauncher\devPlugins\DeviceChangeFix\</OutputPath>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<Content Include="..\Data\DeviceChangeFix.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-
 	<PropertyGroup>
 		<DalamudLibPath>$(appdata)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="deviceChangeFix.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="deviceChangeFix.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="DalamudPackager" Version="2.1.5" />
