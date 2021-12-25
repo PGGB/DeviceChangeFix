@@ -1,0 +1,12 @@
+{
+  "Author": "PGGB",
+  "Name": "DeviceChangeFix",
+  "Punchline": "Stops controller input from freezing randomly.",
+  "Description": "Stops controller input from freezing randomly.",
+  "InternalName": "DeviceChangeFix",
+  "ApplicableVersion": "any",
+  "Tags": [
+    "fix",
+    "gamepad"
+  ]
+}
