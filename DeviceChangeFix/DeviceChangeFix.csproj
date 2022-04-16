@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<Authors>PGGB</Authors>
 		<Company></Company>
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 		<Description>An FF14-Plugin that stops controller input from freezing randomly</Description>
 		<Copyright></Copyright>
 		<PackageProjectUrl>https://github.com/PGGB/DeviceChangeFix</PackageProjectUrl>
@@ -36,7 +36,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DalamudPackager" Version="2.1.5" />
+		<PackageReference Include="DalamudPackager" Version="2.1.6" />
 		<PackageReference Include="SharpDX.DirectInput" Version="4.2.0" />
 		<Reference Include="FFXIVClientStructs">
 			<HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>

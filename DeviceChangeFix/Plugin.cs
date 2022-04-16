@@ -20,7 +20,7 @@ namespace DeviceChangeFix
         private PluginUI PluginUi { get; init; }
 
         public delegate IntPtr DeviceChangeDelegate(IntPtr inputDeviceManager);
-        private Hook<DeviceChangeDelegate> deviceChangeDelegateHook;
+        private Hook<DeviceChangeDelegate>? deviceChangeDelegateHook;
 
         public Plugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
@@ -37,16 +37,19 @@ namespace DeviceChangeFix
             this.PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
 
             // Find the function that is called when a device change happens
-            var signature = "48 83 EC 38 0F B6 81 ? ? ? ?";
-            IntPtr renderAddress = sigScanner.ScanText(signature);
+            var signature = "48 83 EC 38 0F B6 81";
 
-            if (renderAddress == IntPtr.Zero)
+            IntPtr renderAddress;
+
+            if (sigScanner.TryScanText(signature, out renderAddress))
             {
-                PluginLog.Error("Signature not found");
+                this.deviceChangeDelegateHook = new Hook<DeviceChangeDelegate>(renderAddress, this.DeviceChangeDetour);
+                this.deviceChangeDelegateHook.Enable();
             }
-
-            this.deviceChangeDelegateHook = new Hook<DeviceChangeDelegate>(renderAddress, this.DeviceChangeDetour);
-            this.deviceChangeDelegateHook.Enable();
+            else
+            {
+                PluginLog.Error("Signature could not be found");
+            }
 
             this.directInput = new DirectInput();
             this.controllerCount = this.GetControllerCount();
@@ -56,7 +59,8 @@ namespace DeviceChangeFix
         {
             if (this.Configuration.BypassLogic == true)
             {
-                return this.deviceChangeDelegateHook.Original(inputDeviceManager);
+                PluginLog.Information($"triggered");
+                return this.deviceChangeDelegateHook?.Original(inputDeviceManager) ?? IntPtr.Zero;
             }
 
             var res = IntPtr.Zero;
@@ -66,7 +70,7 @@ namespace DeviceChangeFix
             int newControllerCount = this.GetControllerCount();
             if (newControllerCount != this.controllerCount)
             {
-                res = this.deviceChangeDelegateHook.Original(inputDeviceManager);
+                res = this.deviceChangeDelegateHook?.Original(inputDeviceManager) ?? IntPtr.Zero;
 
                 if (newControllerCount > this.controllerCount)
                 {
@@ -100,8 +104,8 @@ namespace DeviceChangeFix
         public void Dispose()
         {
             this.directInput.Dispose();
-            this.deviceChangeDelegateHook.Disable();
-            this.deviceChangeDelegateHook.Dispose();
+            this.deviceChangeDelegateHook?.Disable();
+            this.deviceChangeDelegateHook?.Dispose();
             this.PluginUi.Dispose();
         }
 
